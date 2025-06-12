@@ -34,7 +34,7 @@ setup(
         "Django>=3.2",
         "graphene-django>=3.0.0",
         "social-auth-app-django>=5.0.0",
-        "django-filter>=25.0",
+        "django-filter>=24.3",
     ],
     classifiers=[
         "Development Status :: 4 - Beta",

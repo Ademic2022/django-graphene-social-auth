@@ -23,6 +23,20 @@ class SocialAuthMixin:
 class SocialAuthJWTMixin:
 
     @social_auth_mock
+    def test_social_auth(self, *args):
+        response = self.execute(
+            {
+                "provider": "google-oauth2",
+                "accessToken": "-token-",
+            }
+        )
+
+        self.assertIsNone(response.errors)
+        social = response.data["socialAuth"]["social"]
+        self.assertEqual("test", social["uid"])
+        self.assertIsNotNone(response.data["socialAuth"]["token"])
+
+    @social_auth_mock
     @patch.dict(sys.modules, {"graphql_jwt.shortcuts": None})
     def test_social_auth_import_error(self, *args):
         response = self.execute(

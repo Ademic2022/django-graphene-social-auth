@@ -52,7 +52,8 @@ jobs:
     - name: Test with tox
       run: tox
       env:
-        TOXENV: py${{ matrix.python-version }}-django${{ matrix.django-version }}
+        # Convert version format to match tox.ini (e.g., 3.12 -> 312, 4.1 -> 41)
+        TOXENV: py${{ matrix.python-version == '3.10' && '310' || matrix.python-version == '3.11' && '311' || matrix.python-version == '3.12' && '312' || matrix.python-version == '3.13' && '313' || matrix.python-version == '3.8' && '38' || '39' }}-django${{ matrix.django-version == '3.2' && '32' || matrix.django-version == '4.0' && '40' || matrix.django-version == '4.1' && '41' || matrix.django-version == '4.2' && '42' || matrix.django-version == '5.0' && '50' || '51' }}
 
   lint:
     runs-on: ubuntu-latest

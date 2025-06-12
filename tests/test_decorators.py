@@ -1,6 +1,4 @@
 from unittest.mock import patch
-import asyncio
-
 from django.test import override_settings
 
 from graphql_social_auth import decorators, exceptions

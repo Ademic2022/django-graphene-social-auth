@@ -59,11 +59,6 @@ setup(
         "Framework :: Django :: 5.1",
     ],
     zip_safe=False,
-    tests_require=[
-        "Django>=3.2",
-        "graphene-django>=3.0.0",
-        "social-auth-app-django>=5.0.0",
-    ],
     package_data={
         "graphql_social_auth": [
             "locale/*/LC_MESSAGES/django.po",
@@ -72,5 +67,15 @@ setup(
     },
     extras_require={
         "jwt": ["django-graphql-jwt>=0.4.0"],
+        "test": [
+            "Django>=3.2",
+            "graphene-django>=3.0.0",
+            "social-auth-app-django>=5.0.0",
+            "coverage>=7.0",
+            "pytest>=7.0.0",
+            "pytest-cov>=4.0.0",
+            "pytest-django>=4.5.0",
+            "pytest-asyncio>=0.21.0",
+        ],
     },
 )

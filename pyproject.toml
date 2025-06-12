@@ -9,7 +9,7 @@ description = "Python Social Auth support for Django GraphQL"
 readme = "README.rst"
 license = { file = "LICENSE" }
 authors = [
-    {name = "Michael", email = "ademictech@gmail.com"}
+    {name = "Michael", email = "ademictech@gmail.com"},
     {name = "mongkok", email = "domake.io@gmail.com"},
 ]
 maintainers = [

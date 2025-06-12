@@ -1,8 +1,6 @@
 Django GraphQL Social Auth
 ==========================
 
-|Pypi| |Wheel| |Build Status| |Codecov| |Code Climate|
-
 `Python Social Auth`_ support for `Django GraphQL`_
 
 .. _Django GraphQL: https://github.com/graphql-python/graphene-django
@@ -72,7 +70,7 @@ Install additional requirements.
 
 .. code:: sh
 
-    pip install 'django-graphql-social-auth[jwt]'
+    pip install 'django-graphene-social-auth[jwt]'
 
 
 Add the ``SocialAuthJWT`` mutation to your GraphQL schema.

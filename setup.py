@@ -19,16 +19,16 @@ def get_version(package):
 
 
 setup(
-    name="django-graphql-social-auth",
+    name="django-graphene-social-auth",
     version=get_version("graphql_social_auth"),
     license="MIT",
     description="Python Social Auth support for Django GraphQL",
     long_description="\n\n".join(get_long_description()),
-    author="mongkok",
-    author_email="domake.io@gmail.com",
+    author="Michael",
+    author_email="ademictech@gmail.com",
     maintainer="Michael",
     maintainer_email="ademictech@gmail.com",
-    url="https://github.com/flavors/django-graphql-social-auth/",
+    url="https://github.com/Ademic2022/django-graphene-social-auth/",
     packages=find_packages(exclude=["tests*"]),
     install_requires=[
         "Django>=3.2",

@@ -47,7 +47,7 @@ Add the ``SocialAuth`` mutation to your GraphQL schema.
 - ``provider``: provider name from `Authentication backend list`_.
 - ``accessToken``: third-party (Google, Facebook...) OAuth token obtained with any OAuth client.
 
-.. _Authentication backend list: https://github.com/flavors/django-graphql-social-auth/wiki/Authentication-backends
+.. _Authentication backend list: https://github.com/Ademic2022/django-graphene-social-auth/wiki/Authentication-backends
 
 .. code:: graphql
 
@@ -190,11 +190,7 @@ Gracias `@omab`_ / `Python Social Auth`_.
 .. |Wheel| image:: https://img.shields.io/pypi/wheel/django-graphql-social-auth.svg
    :target: https://pypi.python.org/pypi/django-graphql-social-auth
 
-.. |Build Status| image:: https://travis-ci.org/flavors/django-graphql-social-auth.svg?branch=master
-   :target: https://travis-ci.org/flavors/django-graphql-social-auth
 
-.. |Codecov| image:: https://img.shields.io/codecov/c/github/flavors/django-graphql-social-auth.svg
-   :target: https://codecov.io/gh/flavors/django-graphql-social-auth
+A maintained fork of the original Django GraphQL Social Auth package.
 
-.. |Code Climate| image:: https://api.codeclimate.com/v1/badges/c579bcfde0fbb7f6334c/maintainability
-   :target: https://codeclimate.com/github/flavors/django-graphql-social-auth
+Original project: https://github.com/flavors/django-graphql-social-auth/

@@ -161,7 +161,7 @@ TOTAL                                      149      1     18      2    98%
 
 If you encounter issues during migration:
 
-1. Check the [GitHub Issues](https://github.com/flavors/django-graphql-social-auth/issues)
+1. Check the [GitHub Issues](https://github.com/Ademic2022/django-graphene-social-auth/issues)
 2. Review the test suite for examples
 3. Create a new issue with your specific use case
 

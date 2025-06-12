@@ -23,7 +23,8 @@ class SocialAuthMixin:
 class SocialAuthJWTMixin:
 
     @social_auth_mock
-    def test_social_auth(self, *args):
+    @patch("graphql_jwt.shortcuts.get_token", return_value="test-token")
+    def test_social_auth(self, get_token_mock, *args):
         response = self.execute(
             {
                 "provider": "google-oauth2",
@@ -31,10 +32,16 @@ class SocialAuthJWTMixin:
             }
         )
 
-        self.assertIsNone(response.errors)
+        if response.errors:
+            print("GraphQL Errors:", response.errors)
+            
+        self.assertIsNone(response.errors, "Unexpected GraphQL errors")
+        self.assertIsNotNone(response.data, "Response data is None")
+        self.assertIsNotNone(response.data.get("socialAuth"), "socialAuth is None")
+        
         social = response.data["socialAuth"]["social"]
         self.assertEqual("test", social["uid"])
-        self.assertIsNotNone(response.data["socialAuth"]["token"])
+        self.assertEqual("test-token", response.data["socialAuth"]["token"])
 
     @social_auth_mock
     @patch.dict(sys.modules, {"graphql_jwt.shortcuts": None})

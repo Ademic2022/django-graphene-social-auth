@@ -30,7 +30,3 @@ DATABASES = {
 }
 
 SECRET_KEY = 'test'
-
-AUTHENTICATION_BACKENDS = [
-    'social_core.backends.google.GoogleOAuth2',
-]

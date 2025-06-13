@@ -43,6 +43,9 @@ class SocialAuthMutation(mixins.SocialAuthMixin, graphene.Mutation):
                 result.errors = []
 
             return result
+        except (ImportError, ModuleNotFoundError):
+            # Let import errors bubble up as GraphQL errors for dependency issues
+            raise
         except GraphQLSocialAuthError as e:
             logger.error(f"Social auth error in {cls.__name__}: {e}")
             return cls(success=False, errors=[str(e)], social=None)

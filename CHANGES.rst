@@ -1,6 +1,48 @@
 Changelog
 =========
 
+1.1.0 (2025-06-13)
+------------------
+
+**Major Improvements:**
+
+* **Enhanced Error Handling:** Completely rewritten error handling system with specific exception types
+* **Better Logging:** Added comprehensive logging throughout the authentication flow
+* **Input Validation:** Added validation for provider names and access tokens
+* **Rate Limiting:** Added optional rate limiting to prevent abuse
+* **Production Ready:** Improved error messages and debugging capabilities
+
+**New Features:**
+
+* Added ``ProviderNotFoundError``, ``UserCreationError``, and ``RateLimitError`` exceptions
+* Enhanced mutations now return ``success`` and ``errors`` fields for better error handling
+* Added support for refresh tokens in JWT authentication
+* Improved GraphQL field descriptions and documentation
+* Added comprehensive production setup guide and troubleshooting documentation
+
+**Bug Fixes:**
+
+* Fixed issue where authentication errors weren't properly caught
+* Improved handling of edge cases in token validation
+* Better error messages for missing JWT dependencies
+
+**Documentation:**
+
+* Added ``PRODUCTION_GUIDE.md`` with complete setup instructions
+* Added ``example_settings.py`` with comprehensive Django configuration
+* Updated README with better installation and usage examples
+
+**Breaking Changes:**
+
+* Mutations now return additional fields (``success``, ``errors``) - this might affect existing GraphQL queries
+* Some exception types have been renamed for clarity
+* Fixed README.rst rendering issues on PyPI
+* Updated package name to django-graphene-social-auth
+* Minor documentation improvements
+* Initial release of maintained fork
+* Updated maintainer information
+* Compatible with modern Django and Python versions
+
 0.2.0
 -----
 

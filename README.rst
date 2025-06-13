@@ -3,106 +3,218 @@ Django GraphQL Social Auth
 
 `Python Social Auth`_ support for `Django GraphQL`_
 
+.. _Python Social Auth: https://python-social-auth.readthedocs.io/
 .. _Django GraphQL: https://github.com/graphql-python/graphene-django
 
+🚀 **Production-Ready** social authentication for GraphQL APIs with comprehensive error handling, logging, and security features.
+
+Features
+--------
+
+* 🔐 **Session & JWT Authentication** - Support for both session-based and JWT token authentication
+* 🛡️ **Enhanced Security** - Built-in rate limiting, input validation, and comprehensive error handling  
+* 📊 **Production Monitoring** - Detailed logging and error tracking for production environments
+* 🔧 **Easy Integration** - Simple GraphQL mutations with extensive documentation
+* 🌐 **Multiple Providers** - Support for Google, Facebook, GitHub, Twitter, LinkedIn, Apple, and more
+* 📚 **Comprehensive Docs** - Complete setup guides and troubleshooting documentation
 
 Dependencies
 ------------
 
 * Python ≥ 3.8
 * Django ≥ 3.2
-
+* graphene-django ≥ 3.0.0
+* social-auth-app-django ≥ 5.0.0
 
 Installation
 ------------
 
-Install last stable version from Pypi.
+Install from PyPI:
 
 .. code:: sh
 
-    pip install django-graphql-social-auth
+    pip install django-graphene-social-auth
 
+Quick Start
+-----------
 
-See the `documentation`_ for further guidance on setting *Python Social Auth*.
+1. **Add to Django settings:**
 
-.. _documentation: http://python-social-auth.readthedocs.io/en/latest/configuration/django.html
+.. code:: python
 
-Add the ``SocialAuth`` mutation to your GraphQL schema.
+    INSTALLED_APPS = [
+        # ... your apps
+        'social_django',
+        'graphene_django',
+        # ... your apps  
+    ]
+
+    AUTHENTICATION_BACKENDS = [
+        'social_core.backends.google.GoogleOAuth2',
+        'social_core.backends.facebook.FacebookOAuth2',
+        # ... other backends
+        'django.contrib.auth.backends.ModelBackend',
+    ]
+
+    # Configure your social providers
+    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'your-google-client-id'
+    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'your-google-client-secret'
+
+2. **Run migrations:**
+
+.. code:: sh
+
+    python manage.py migrate
+
+3. **Add to your GraphQL schema:**
 
 .. code:: python
 
     import graphene
     import graphql_social_auth
 
-
     class Mutations(graphene.ObjectType):
+        # For session-based authentication
         social_auth = graphql_social_auth.SocialAuth.Field()
+        
+        # For JWT authentication (requires django-graphql-jwt)
+        # social_auth = graphql_social_auth.SocialAuthJWT.Field()
 
-`Session`_ authentication via *accessToken*.
+Usage Examples
+--------------
 
-.. _Session: https://docs.djangoproject.com/en/2.0/topics/http/sessions/
-
-- ``provider``: provider name from `Authentication backend list`_.
-- ``accessToken``: third-party (Google, Facebook...) OAuth token obtained with any OAuth client.
-
-.. _Authentication backend list: https://github.com/Ademic2022/django-graphene-social-auth/wiki/Authentication-backends
+**GraphQL Mutation (Session Authentication):**
 
 .. code:: graphql
 
     mutation SocialAuth($provider: String!, $accessToken: String!) {
       socialAuth(provider: $provider, accessToken: $accessToken) {
+        success
+        errors
         social {
           uid
           extraData
         }
+        user {
+          id
+          username
+          email
+        }
       }
     }
 
+**GraphQL Mutation (JWT Authentication):**
 
-JSON Web Token (JWT)
---------------------
+.. code:: graphql
 
-Authentication solution based on `JSON Web Token`_.
+    mutation SocialAuthJWT($provider: String!, $accessToken: String!) {
+      socialAuth(provider: $provider, accessToken: $accessToken) {
+        success
+        errors
+        token
+        refreshToken
+        social {
+          uid
+        }
+      }
+    }
 
-.. _JSON Web Token: https://jwt.io/
+**Variables:**
 
-Install additional requirements.
+.. code:: json
+
+    {
+      "provider": "google-oauth2",
+      "accessToken": "your-oauth-access-token"
+    }
+
+Supported Providers
+-------------------
+
+* **Google** - ``google-oauth2``
+* **Facebook** - ``facebook``  
+* **GitHub** - ``github``
+* **Twitter** - ``twitter``
+* **LinkedIn** - ``linkedin-oauth2``
+* **Apple** - ``apple-id``
+* **Discord** - ``discord``
+* **Microsoft** - ``microsoft-graph``
+
+For complete provider setup instructions, see the `Authentication backend list`_.
+
+.. _Authentication backend list: https://python-social-auth.readthedocs.io/en/latest/backends/index.html
+
+Production Setup
+----------------
+
+For production deployment with security best practices, monitoring, and troubleshooting guides, see:
+
+* 📖 `Production Setup Guide <PRODUCTION_GUIDE.md>`_
+* 🔧 `Troubleshooting Guide <TROUBLESHOOTING.md>`_  
+* ⚙️ `Example Settings <example_settings.py>`_
+
+Error Handling
+--------------
+
+The package provides comprehensive error handling with specific error types:
+
+.. code:: python
+
+    # Example error response
+    {
+      "data": {
+        "socialAuth": {
+          "success": false,
+          "errors": ["Provider 'invalid-provider' not found or not configured"],
+          "social": null,
+          "user": null
+        }
+      }
+    }
+
+Common error types:
+
+* ``PROVIDER_NOT_FOUND`` - Invalid or unconfigured provider
+* ``INVALID_TOKEN`` - Expired or invalid access token  
+* ``AUTH_FAILED`` - Authentication process failed
+* ``RATE_LIMIT_EXCEEDED`` - Too many requests
+* ``USER_CREATION_FAILED`` - User creation error
+
+JWT Authentication
+------------------
+
+For JSON Web Token (JWT) authentication, install the JWT extension:
 
 .. code:: sh
 
     pip install 'django-graphene-social-auth[jwt]'
 
+Configure JWT in your settings (see ``example_settings.py`` for complete configuration):
 
-Add the ``SocialAuthJWT`` mutation to your GraphQL schema.
+.. code:: python
+
+    import datetime
+    
+    GRAPHQL_JWT = {
+        'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=60),
+        'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
+        'JWT_LONG_RUNNING_REFRESH_TOKEN': True,
+    }
+
+Use ``SocialAuthJWT`` instead of ``SocialAuth``:
 
 .. code:: python
 
     import graphene
     import graphql_social_auth
 
-
     class Mutations(graphene.ObjectType):
         social_auth = graphql_social_auth.SocialAuthJWT.Field()
 
+Relay Support
+-------------
 
-Authenticate via *accessToken* to obtain a JSON Web Token.
-
-.. code:: graphql
-
-    mutation SocialAuth($provider: String!, $accessToken: String!) {
-      socialAuth(provider: $provider, accessToken: $accessToken) {
-        social {
-          uid
-        }
-        token
-      }
-    }
-
-
-Relay
------
-
-Complete support for `Relay`_.
+Complete support for `Relay`_:
 
 .. _Relay: https://facebook.github.io/relay/
 
@@ -111,84 +223,67 @@ Complete support for `Relay`_.
     import graphene
     import graphql_social_auth
 
-
     class Mutations(graphene.ObjectType):
         social_auth = graphql_social_auth.relay.SocialAuth.Field()
 
-``graphql_social_auth.relay.SocialAuthJWT.Field()`` for `JSON Web Token (JWT)`_ authentication.
-
-`Relay mutations`_ only accepts one argument named *input*:
-
-.. _Relay mutations: https://facebook.github.io/relay/graphql/mutations.htm
+Relay mutations accept input arguments:
 
 .. code:: graphql
 
-    mutation SocialAuth($provider: String!, $accessToken: String!) {
-      socialAuth(input:{provider: $provider, accessToken: $accessToken}) {
+    mutation SocialAuth($input: SocialAuthInput!) {
+      socialAuth(input: $input) {
         social {
           uid
         }
       }
     }
 
+Customization
+-------------
 
-Customizing
------------
-
-If you want to customize the ``SocialAuth`` behavior, you'll need to customize the ``resolve()`` method on a subclass of ``SocialAuthMutation`` or ``.relay.SocialAuthMutation.``
+Customize the ``SocialAuth`` behavior by subclassing ``SocialAuthMutation``:
 
 .. code:: python
 
     import graphene
     import graphql_social_auth
+    from myapp.types import UserType
 
-
-    class SocialAuth(graphql_social_auth.SocialAuthMutation):
+    class CustomSocialAuth(graphql_social_auth.SocialAuthMutation):
         user = graphene.Field(UserType)
 
         @classmethod
         def resolve(cls, root, info, social, **kwargs):
-            return cls(user=social.user)
+            # Custom logic here
+            return cls(
+                social=social,
+                user=social.user,
+                success=True,
+                errors=[]
+            )
 
+Contributing
+------------
 
-Authenticate via *accessToken* to obtain the *user id*.
+We welcome contributions! Please see our GitHub repository for:
 
-.. code:: graphql
+* 🐛 `Issue tracking <https://github.com/Ademic2022/django-graphene-social-auth/issues>`_
+* 💡 `Feature requests <https://github.com/Ademic2022/django-graphene-social-auth/issues/new>`_
+* 📝 `Pull requests <https://github.com/Ademic2022/django-graphene-social-auth/pulls>`_
 
-    mutation SocialAuth($provider: String!, $accessToken: String!) {
-      socialAuth(provider: $provider, accessToken: $accessToken) {
-        social {
-          uid
-        }
-        user {
-          id
-        }
-      }
-    }
+License
+-------
 
+This project is licensed under the MIT License - see the `LICENSE <LICENSE>`_ file for details.
 
-Project template
-----------------
+Acknowledgments
+---------------
 
-There is a `Django project template`_ to start a demo project.
+This package is a maintained fork of the original `django-graphql-social-auth`_ by `@flavors`_. 
 
-.. _Django project template: https://github.com/ice-creams/graphql-social-auth-template
+Special thanks to `@omab`_ for `Python Social Auth`_.
 
-----
-
-Gracias `@omab`_ / `Python Social Auth`_.
-
+.. _django-graphql-social-auth: https://github.com/flavors/django-graphql-social-auth/
+.. _@flavors: https://github.com/flavors
 .. _@omab: https://github.com/omab
-.. _Python Social Auth: http://python-social-auth.readthedocs.io/
-
-
-.. |Pypi| image:: https://img.shields.io/pypi/v/django-graphql-social-auth.svg
-   :target: https://pypi.python.org/pypi/django-graphql-social-auth
-
-.. |Wheel| image:: https://img.shields.io/pypi/wheel/django-graphql-social-auth.svg
-   :target: https://pypi.python.org/pypi/django-graphql-social-auth
-
-
-A maintained fork of the original Django GraphQL Social Auth package.
-
-Original project: https://github.com/flavors/django-graphql-social-auth/
+.. _Python Social Auth: https://python-social-auth.readthedocs.io/
